@@ -6,7 +6,7 @@
 /*   By: kilian <kilian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 16:32:11 by kilian            #+#    #+#             */
-/*   Updated: 2024/12/24 20:17:20 by kilian           ###   ########.fr       */
+/*   Updated: 2024/12/27 15:47:41 by kilian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <unistd.h>
 # include <stdarg.h>
 
+typedef struct s_table t_table;
+
 typedef struct s_data {
 	int		nb_philo;
 	int		time_to_die;
@@ -35,6 +37,8 @@ typedef struct s_philo {
 	int		id;
 	int		last_meal;
 	int		nb_meal;
+	pthread_mutex_t	meal_mutex;
+	t_table	*table; 
 }				t_philo;
 
 typedef struct s_table {
@@ -54,5 +58,6 @@ void	*philo_routine(void *arg);
 int		ft_atoi(char *str);
 void	allocation(t_table *table);
 void	free_all(t_table *table);
+int		get_time(void);
 
 #endif

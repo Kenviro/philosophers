@@ -5,6 +5,7 @@ CFLAGS = -Wall -Wextra -Werror -pthread -g3
 SRC = 	philosophers.c \
 		parse.c \
 		utils.c \
+		routine.c \
 
 OBJ = $(SRC:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: kilian <kilian@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 18:53:23 by kilian            #+#    #+#             */
-/*   Updated: 2024/12/24 20:05:26 by kilian           ###   ########.fr       */
+/*   Updated: 2024/12/27 15:41:11 by kilian           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,25 @@ void	allocation(t_table *table)
 
 void	free_all(t_table *table)
 {
+	int	i;
+
+	i = 0;
+	while (i < table->data.nb_philo)
+	{
+		pthread_mutex_destroy(&table->forks[i]);
+		i++;
+	}
 	free(table->philos);
 	free(table->threads);
 	free(table->forks);
+}
+
+int	get_time(void)
+{
+	struct timeval	time;
+	int				result;
+
+	gettimeofday(&time, NULL);
+	result = time.tv_sec * 1000 + time.tv_usec / 1000;
+	return (result);
 }
