@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kilian <kilian@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ktintim- <ktintim-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 18:53:23 by kilian            #+#    #+#             */
-/*   Updated: 2024/12/27 15:41:11 by kilian           ###   ########.fr       */
+/*   Updated: 2025/01/08 16:13:44 by ktintim-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,12 +55,6 @@ void	allocation(t_table *table)
 		printf("Error: malloc failed\n");
 		exit(1);
 	}
-	table->forks = malloc(sizeof(pthread_mutex_t) * table->data.nb_philo);
-	if (!table->forks)
-	{
-		printf("Error: malloc failed\n");
-		exit(1);
-	}
 }
 
 void	free_all(t_table *table)
@@ -70,18 +64,18 @@ void	free_all(t_table *table)
 	i = 0;
 	while (i < table->data.nb_philo)
 	{
-		pthread_mutex_destroy(&table->forks[i]);
+		pthread_mutex_destroy(&table->philos->forks);
 		i++;
 	}
+	pthread_mutex_destroy(&table->data.print);
 	free(table->philos);
 	free(table->threads);
-	free(table->forks);
 }
 
-int	get_time(void)
+long long	get_time(void)
 {
 	struct timeval	time;
-	int				result;
+	long long		result;
 
 	gettimeofday(&time, NULL);
 	result = time.tv_sec * 1000 + time.tv_usec / 1000;
