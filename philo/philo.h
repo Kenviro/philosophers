@@ -6,7 +6,7 @@
 /*   By: ktintim- <ktintim-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 16:32:11 by kilian            #+#    #+#             */
-/*   Updated: 2025/01/08 16:33:47 by ktintim-         ###   ########.fr       */
+/*   Updated: 2025/01/10 11:47:14 by ktintim-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,35 +29,40 @@ typedef struct s_data {
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				nb_must_eat;
+	int				nb_philo_eat;
+	int				dead;
 	long long		start;
 	pthread_mutex_t	print;
+	pthread_mutex_t	dead_mutex;
+	struct s_philo	*philos;
 }				t_data;
 
 typedef struct s_philo {
+	int				die;
 	int				id;
 	int				last_meal;
 	int				nb_meal;
+	int				has_eaten;
 	pthread_mutex_t	forks;
 	pthread_mutex_t	*next_fork;
-	struct s_table	*table;
+	pthread_t		is_dead;
+	pthread_t		thread;
+	t_data			*data;
 }				t_philo;
 
-typedef struct s_table {
-	t_data			data;
-	t_philo			*philos;
-	pthread_t		*threads;
-}				t_table;
+// philosophers.c
+void		free_all(t_data *data);
 
 // parse.c
-void		parse_args(int argc, char **argv, t_table *table);
+void		parse_args(int argc, char **argv, t_data *data);
 
 // routine.c
 void		*philo_routine(void *arg);
 
 // utils.c
-int			ft_atoi(char *str);
-void		allocation(t_table *table);
-void		free_all(t_table *table);
+void		philo_utils(t_philo *philo, t_data *data);
+void		allocation(t_data *data);
+void		*is_dead(void *arg);
 long long	get_time(void);
 
 #endif
