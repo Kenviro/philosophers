@@ -6,7 +6,7 @@
 /*   By: ktintim- <ktintim-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 18:53:23 by kilian            #+#    #+#             */
-/*   Updated: 2025/01/10 11:47:42 by ktintim-         ###   ########.fr       */
+/*   Updated: 2025/01/15 16:11:13 by ktintim-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	allocation(t_data *data)
 	if (!data->philos)
 	{
 		printf("Error: malloc failed\n");
-		exit(1);
+		data->error = 1;
 	}
 }
 
@@ -32,51 +32,52 @@ long long	get_time(void)
 	return (result);
 }
 
-void	philo_utils(t_philo *philo, t_data *data)
+static void	philo_finish(t_philo *philo, t_data data)
 {
-	if (philo->data->nb_philo == 1)
+	int	i;
+
+	i = 0;
+	while (i < data.nb_philo)
 	{
-		usleep((philo->data->time_to_die * 1000) + 2000);
-		pthread_mutex_unlock(&philo->forks);
-	}
-	if (philo->nb_meal == data->nb_must_eat && philo->has_eaten == 0)
-	{
-		philo->has_eaten = 1;
-		data->nb_philo_eat++;
+		pthread_mutex_lock(&philo->global->g_lock);
+		philo[i].finish = 1;
+		pthread_mutex_unlock(&philo->global->g_lock);
+		i++;
 	}
 }
 
 static void	print_dead(t_philo *philo, t_data *data)
 {
-	pthread_mutex_lock(&data->dead_mutex);
-	if (philo->die == 1 && philo->data->dead == 1)
-	{
-		data->dead = 2;
-		pthread_mutex_lock(&data->print);
-		printf("%lld %d died\n", (get_time() - data->start), \
-				philo->id);
-		pthread_mutex_unlock(&data->print);
-	}
-	pthread_mutex_unlock(&data->dead_mutex);
+	data->global->dead = 1;
+	pthread_mutex_lock(&data->print);
+	printf("%lld %d died\n", (get_time() - data->start), philo->id);
+	pthread_mutex_unlock(&data->print);
 }
 
 void	*is_dead(void *arg)
 {
-	t_philo	*philo;
 	t_data	*data;
+	int		i;
 
-	philo = (t_philo *)arg;
-	data = philo->data;
-	while (data->dead == 0 && data->nb_philo_eat < data->nb_philo)
+	data = (t_data *)arg;
+	i = 0;
+	while (data->global->nb_philo_eat < data->nb_philo && \
+			data->global->dead == 0)
 	{
-		if ((get_time() - data->start) - philo->last_meal > data->time_to_die)
+		while (i < data->nb_philo)
 		{
-			philo->die = 1;
-			philo->data->dead = 1;
+			if ((get_time() - data->start) - data->philos[i].last_meal > \
+				data->time_to_die && data->global->dead == 0)
+			{
+				pthread_mutex_lock(&data->philos[i].data.dead_mutex);
+				print_dead(&data->philos[i], data);
+				pthread_mutex_unlock(&data->philos[i].data.dead_mutex);
+			}
+			has_eaten(data, i);
+			i++;
 		}
-		usleep(50);
+		i = 0;
 	}
-	if (philo->has_eaten == 0)
-		print_dead(philo, data);
+	philo_finish(data->philos, *data);
 	return (NULL);
 }

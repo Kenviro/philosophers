@@ -6,6 +6,8 @@ SRC = 	philosophers.c \
 		parse.c \
 		utils.c \
 		routine.c \
+		arg_check.c \
+		print.c
 
 OBJ = $(SRC:.c=.o)
 
