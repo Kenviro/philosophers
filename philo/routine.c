@@ -6,7 +6,7 @@
 /*   By: ktintim- <ktintim-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 18:30:38 by kilian            #+#    #+#             */
-/*   Updated: 2025/01/15 16:50:18 by ktintim-         ###   ########.fr       */
+/*   Updated: 2025/01/17 10:39:42 by ktintim-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,6 @@ void	*philo_routine(void *arg)
 	philo = (t_philo *)arg;
 	if ((philo->id % 2) == 0)
 		usleep(100);
-	if (philo->data.nb_philo == 1)
-	{
-		print("is thinking", philo, philo->data.start);
-		print("has taken a fork", philo, philo->data.start);
-		return (NULL);
-	}
 	while (1)
 	{
 		pthread_mutex_lock(&philo->global->g_lock);

@@ -6,7 +6,7 @@
 /*   By: ktintim- <ktintim-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 18:51:56 by kilian            #+#    #+#             */
-/*   Updated: 2025/01/15 16:11:07 by ktintim-         ###   ########.fr       */
+/*   Updated: 2025/01/17 10:44:12 by ktintim-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,23 +18,22 @@ int	create_thread(t_data *data)
 
 	i = 0;
 	get_all_time(data);
-	pthread_create(&data->monitoring, NULL, &is_dead, data);
-	while (i < data->nb_philo)
+	if (data->nb_philo > 1)
 	{
-		data->philos[i].data.start = get_time();
-		i++;
-	}
-	i = 0;
-	while (i < data->nb_philo)
-	{
-		if (pthread_create(&data->philos[i].thread, NULL, \
-					&philo_routine, &(data->philos[i])) != 0)
+		pthread_create(&data->monitoring, NULL, &is_dead, data);
+		while (i < data->nb_philo)
 		{
-			perror("Erreur création thread");
-			return (1);
+			if (pthread_create(&data->philos[i].thread, NULL, \
+						&philo_routine, &(data->philos[i])) != 0)
+			{
+				perror("Erreur création thread");
+				return (1);
+			}
+			i++;
 		}
-		i++;
 	}
+	else
+		print_1_philo(data);
 	return (0);
 }
 
@@ -56,7 +55,7 @@ t_global	*init_global(t_data *data)
 
 static int	check_arg(t_data *data, int argc)
 {
-	if (data->nb_philo < 1)
+	if (data->nb_philo < 1 || data->nb_philo > 200)
 		return (1);
 	if (data->time_to_die < 0)
 		return (1);

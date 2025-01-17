@@ -6,7 +6,7 @@
 /*   By: ktintim- <ktintim-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 18:30:58 by kilian            #+#    #+#             */
-/*   Updated: 2025/01/15 11:20:32 by ktintim-         ###   ########.fr       */
+/*   Updated: 2025/01/17 10:45:00 by ktintim-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	join_threads(t_data *data)
 static void	init_philo(t_data data, int i)
 {
 	data.philos[i].id = i + 1;
-	data.philos[i].last_meal = 0;
+	data.philos[i].last_meal = get_time();
 	data.philos[i].nb_meal = 0;
 	data.philos[i].finish = 0;
 	data.philos[i].fork = 0;
@@ -81,7 +81,8 @@ int	main(int argc, char **argv)
 		return (1);
 	if (create_thread(&data) == 1)
 		return (1);
-	join_threads(&data);
+	if (data.nb_philo != 1)
+		join_threads(&data);
 	free_all(&data);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: ktintim- <ktintim-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/23 16:32:11 by kilian            #+#    #+#             */
-/*   Updated: 2025/01/15 16:38:27 by ktintim-         ###   ########.fr       */
+/*   Updated: 2025/01/17 10:44:20 by ktintim-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ typedef struct s_global {
 typedef struct s_philo {
 	int				finish;
 	int				id;
-	int				last_meal;
+	long long		last_meal;
 	int				nb_meal;
 	int				fork;
 	int				next_fork;
@@ -86,6 +86,7 @@ long long	get_time(void);
 
 // print_fork.c
 void		print(char *str, t_philo *philo, long long start);
+void		print_1_philo(t_data *data);
 void		get_all_time(t_data *data);
 
 #endif

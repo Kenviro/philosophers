@@ -6,7 +6,7 @@
 /*   By: ktintim- <ktintim-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 18:53:23 by kilian            #+#    #+#             */
-/*   Updated: 2025/01/15 16:11:13 by ktintim-         ###   ########.fr       */
+/*   Updated: 2025/01/17 10:11:42 by ktintim-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	*is_dead(void *arg)
 	{
 		while (i < data->nb_philo)
 		{
-			if ((get_time() - data->start) - data->philos[i].last_meal > \
+			if ((get_time() - data->philos[i].last_meal) > \
 				data->time_to_die && data->global->dead == 0)
 			{
 				pthread_mutex_lock(&data->philos[i].data.dead_mutex);
