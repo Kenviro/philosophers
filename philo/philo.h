@@ -23,7 +23,8 @@
 # include <unistd.h>
 # include <stdarg.h>
 
-typedef struct s_data {
+typedef struct s_data
+{
 	int				error;
 	int				nb_philo;
 	int				time_to_die;
@@ -38,13 +39,15 @@ typedef struct s_data {
 	struct s_philo	*philos;
 }				t_data;
 
-typedef struct s_global {
+typedef struct s_global
+{
 	int				dead;
 	int				nb_philo_eat;
 	pthread_mutex_t	g_lock;
 }				t_global;
 
-typedef struct s_philo {
+typedef struct s_philo
+{
 	int				finish;
 	int				id;
 	long long		last_meal;
