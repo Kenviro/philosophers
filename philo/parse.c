@@ -6,7 +6,7 @@
 /*   By: ktintim- <ktintim-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/24 18:51:56 by kilian            #+#    #+#             */
-/*   Updated: 2025/01/17 10:44:12 by ktintim-         ###   ########.fr       */
+/*   Updated: 2025/01/23 14:31:04 by ktintim-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,14 @@ void	parse_args(int argc, char **argv, t_data *data)
 
 void	has_eaten(t_data *data, int i)
 {
+	pthread_mutex_lock(&data->global->g_lock);
 	if (data->philos[i].nb_meal == data->nb_must_eat && \
 				data->philos[i].eated == 0)
 	{
 		data->philos[i].eated = 1;
+		pthread_mutex_unlock(&data->global->g_lock);
 		data->global->nb_philo_eat++;
+		pthread_mutex_lock(&data->global->g_lock);
 	}
+	pthread_mutex_unlock(&data->global->g_lock);
 }
